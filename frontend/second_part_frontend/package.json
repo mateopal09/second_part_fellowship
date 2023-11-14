@@ -5,11 +5,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "serve": "vue-cli-service"
   },
   "dependencies": {
-    "vue": "^3.3.4",
-    "vue-query-builder": "^0.8.2"
+    "@syncfusion/ej2-vue-querybuilder": "^23.1.44",
+    "vue": "^3.3.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
