@@ -10,9 +10,9 @@
                         <e-columns>
                             <!--Fields to filter all the tables-->
                             <e-column field='country_code' label="Country code" type="boolean" :values="country_code_array"/>
-                            <e-column field="status_code" label="Status code" type="boolean" :values="series_code_array"/>
+                            <e-column field="series_code" label="Series code" type="boolean" :values="series_code_array"/>
                             <e-column field='year' label='Year' type='date' format="yyyy" />
-                            <e-column field='value' label='Value' type='string' />
+                            <e-column field='value' label='Value' type='number'/>
                         </e-columns>
                     </ejs-querybuilder>
                     <button class="e-query-builder_runquery" @click="runQuery">Run Query</button>
