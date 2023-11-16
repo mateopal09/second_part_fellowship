@@ -13,10 +13,10 @@ from user_stories_feature.views import QueryModelViewSet
 
 #Create a router and register our viewsets with it.
 router = routers.DefaultRouter()
-router.register(r'QueryModel', QueryModelViewSet)
+router.register(r'query-builder', QueryModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user-storie',include('user_stories_feature.urls')),
-    path('', include(router.urls))
+    path('api/', include(router.urls))
 ]

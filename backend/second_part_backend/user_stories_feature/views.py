@@ -2,11 +2,12 @@
 Views for user_stories_feature
 """
 #Django rest-framework
+import json
 from rest_framework import viewsets
 
 #Django
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 #Local Aplication
 from user_stories_feature.queries import visual_query_builder
@@ -14,7 +15,7 @@ from user_stories_feature.models import QueryModel
 from user_stories_feature.serializers import QueryModelSerializer
 
 
-
+@csrf_exempt
 def view_visual_query_builder(request):
     """
         View for Visual Query Builder
@@ -28,11 +29,19 @@ def view_visual_query_builder(request):
         Returns:
             django.http.HTTpResponse: The HTTp response
     """
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        country_code = data.get('country_code')
+        series_code = data.get('series_code')
+        year = data.get('year')
+        value = data.get('value')
 
-    results = visual_query_builder()
-    result_str = ','.join([str(result[0]) for result in results])
-    return HttpResponse("using django query builder " + result_str)    
-
+        results = visual_query_builder(country_code,series_code, year, value)
+        result_list = [{'country_code': row.country_code, 'series_code': row.series_code,
+                        'year': row.year, 'value':row.value} for row in results]
+        return JsonResponse(result_list, safe=False)
+        
+      
 
 class QueryModelViewSet(viewsets.ModelViewSet):
     """
