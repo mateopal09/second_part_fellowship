@@ -1,30 +1,41 @@
-<script>
-import QueryBuilder from './components/QueryBuilder.vue';
-
-export default{
-    name:"App",
-    components: {
-        QueryBuilder
-    }
-
-}
-</script>
 <template>
     <div id="app">
         <header>
             <h1 class="title-header">Query Lab</h1>
         </header>
         <main>
-            <QueryBuilder/>
+            <QueryBuilder @data-obtained="updateData"/>
+            <VisualQuery :data="responseData"/>
         </main>
         <footer>
             <p>Made by Mateo Palomá</p>
         </footer>
     </div>
 </template>
+<script>
+import QueryBuilder from './components/QueryBuilder.vue';
+import VisualQuery from './components/VisualQuery.vue';
 
+export default{
+    name:"App",
+    components: {
+    QueryBuilder,
+    VisualQuery
+    },
+    data(){
+        return {
+            responseData: null
+        }
+    },
+    methods: {
+        updateData(newData){
+            this.respondeData = newData;
+            console.log("Datos actualizados")
+        }
+    }
 
-
+}
+</script>
 <style>
 /*
 
@@ -90,6 +101,10 @@ main {
     background-color: white;
     width: var(--with-size-page);
     height: auto;
+    
+}
+
+VisualQuery{
     
 }
 

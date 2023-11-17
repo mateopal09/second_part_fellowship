@@ -17,6 +17,6 @@ router.register(r'query-builder', QueryModelViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user-storie',include('user_stories_feature.urls')),
-    path('api/', include(router.urls))
+    path('',include('user_stories_feature.urls')),
+    path('api/', include(router.urls)),
 ]

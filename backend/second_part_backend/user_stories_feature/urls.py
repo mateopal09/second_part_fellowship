@@ -11,6 +11,6 @@ from user_stories_feature import views
 #Define the application routes
 urlpatterns = [
     
-    path('/', views.view_visual_query_builder, name='view_query')
+    path('', views.view_visual_query_builder, name='view_query'),
     
 ]
