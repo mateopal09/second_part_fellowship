@@ -14,8 +14,8 @@ from django.http import JsonResponse, HttpResponse
 
 #Local Aplication
 from user_stories_feature.queries import visual_query_builder
-from user_stories_feature.models import QueryModel
-from user_stories_feature.serializers import QueryModelSerializer
+from user_stories_feature.models import QueryModel, SavedQuery
+from user_stories_feature.serializers import QueryModelSerializer, SavedQuerySerializer
 
 @csrf_exempt
 def view_visual_query_builder(request):
@@ -65,3 +65,10 @@ class QueryModelViewSet(viewsets.ModelViewSet):
     """
     queryset = QueryModel.objects.all()
     serializer_class = QueryModelSerializer
+
+class SavedQueryViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for the Saved Query
+    """
+    queryset = SavedQuery.objects.all()
+    serializer_class = SavedQuerySerializer

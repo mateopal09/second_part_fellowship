@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 #Local Application
-from user_stories_feature.models import QueryModel
+from user_stories_feature.models import QueryModel, SavedQuery
 
 class QueryModelSerializer(serializers.ModelSerializer):
     """
@@ -19,3 +19,9 @@ class QueryModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = QueryModel
         fields = ['id','country_code', 'series_code', 'year', 'value']
+
+
+class SavedQuerySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavedQuery
+        fields = ['id','name','comment', 'username', 'query']
