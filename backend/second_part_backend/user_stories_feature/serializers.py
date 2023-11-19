@@ -22,6 +22,15 @@ class QueryModelSerializer(serializers.ModelSerializer):
 
 
 class SavedQuerySerializer(serializers.ModelSerializer):
+    """
+        Saved Query Serializer
+
+        This will be used for Save the query that the user wants to save
+
+        Attributes:
+            Meta.Model (SavedQuery): The model class to which this serializer is tied.
+            Meta.fields (list): The fields to be included in the serialized representation.
+    """
     class Meta:
         model = SavedQuery
         fields = ['id','name','comment', 'username', 'query']

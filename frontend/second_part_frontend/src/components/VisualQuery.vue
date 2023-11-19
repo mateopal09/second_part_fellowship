@@ -85,7 +85,7 @@ export default {
         // Define the fields that will be used to create the datasets for the chart
         const fields = ['country_code', 'series_code', 'year', 'value'];
         // Define the tables that will be used as labels for the chart
-        const tables = ['country_summary', 'series_summary', 'international_education', 'country_series_definitions'];
+        const tables = ['country_summary', 'series_summary', 'International Education', 'country_series_definitions'];
         // Define the colors that will be used for the datasets in the chart
         const colors = ['#f87979', '#7acbf9', '#f8e879', '#79f8f2'];
         // Map over the fields to create the datasets for the chart
@@ -130,6 +130,6 @@ export default {
   right: 0;
   border: 0.001rem solid #113140;
   border-radius: 0.5rem;
-  margin: 1.5rem 30rem;
+  margin: 1.5rem 5rem;
 }
 </style>

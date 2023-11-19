@@ -69,6 +69,12 @@ class QueryModelViewSet(viewsets.ModelViewSet):
 class SavedQueryViewSet(viewsets.ModelViewSet):
     """
     ViewSet for the Saved Query
+
+    This ViewSet provides the CRUD operations for the SavedQuery Instances.
+
+    Attributes:
+        - queryset (django.db.models.query.SavedQuery): The SavedQuery queryset.
+        - serializer_class (rest_framework.serializers.ModelSerializer). The serializer class.
     """
     queryset = SavedQuery.objects.all()
     serializer_class = SavedQuerySerializer

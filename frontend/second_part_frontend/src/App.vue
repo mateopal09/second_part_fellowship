@@ -6,11 +6,13 @@
         <main>
             <!-- The QueryBuilder component is used to build the query. 
                  When the data is obtained, the "updateData" method is called with the new data. -->
-            <QueryBuilder @data-obtained="updateData"/>
-            
+            <QueryBuilder class="querybuilder" @data-obtained="updateData" @query-made="querycreated"/>
+
             <!-- The VisualQuery component is used to visualize the data.
                  The "responseData" prop is passed to it. -->
-            <VisualQuery :data="responseData"/>
+            <VisualQuery class="visualquery" :data="responseData" />
+
+            <SaveQuery class="savequery" :query="query" />
 
 
         </main>
@@ -23,25 +25,34 @@
 <script>
 import QueryBuilder from './components/QueryBuilder.vue';
 import VisualQuery from './components/VisualQuery.vue';
+import SaveQuery from './components/SaveQuery.vue';
+import console from 'console';
 
 
-export default{
-    name:"App",
+export default {
+    name: "App",
     components: {
-    // Importing the QueryBuilder and VisualQuery components
-    QueryBuilder,
-    VisualQuery
-},
-    data(){
+        // Importing the QueryBuilder and VisualQuery components
+        QueryBuilder,
+        VisualQuery,
+        SaveQuery
+    },
+    data() {
         return {
             // The responseData data property is used to store the data obtained from the query
-            responseData: null
+            responseData: null,
+            query: null
         }
     },
     methods: {
         // The updateData method is used to update the responseData property with the new data
-        updateData(newData){
+        updateData(newData) {
             this.responseData = newData;
+        },
+        
+        querycreated(query) {
+            this.query=query;
+
         }
     }
 }
@@ -77,7 +88,7 @@ html {
 
 
 body {
-    display:flex;
+    display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
@@ -94,7 +105,7 @@ header {
     background-color: #0A192F;
     width: var(--with-size-page);
     height: 5.6rem;
-    
+
 }
 
 .title-header {
@@ -113,10 +124,28 @@ main {
     background-color: white;
     width: var(--with-size-page);
     height: auto;
-    flex: 1 0 auto;
+
+
+}
+
+.querybuilder{
+    /* Styles for  QueryBuilder */
+  
+}
+
+.visualquery {
+    /* Styles for  VisualQuery */
+    position: relative;
+    
     
 }
 
+.savequery {
+    /* Styles for  SaveQuery */
+    position: relative;
+    top: 40rem;
+   
+}
 
 /**------------
     Styles for footer
@@ -128,10 +157,9 @@ footer {
     background-color: #0A192F;
     font-family: var(--font-family);
     width: var(--with-size-page);
-    height:5.6rem;
+    height: 5.6rem;
     letter-spacing: 0.2rem;
     color: #FFC300;
     text-shadow: 0.1rem 0.1rem #B8B8D1;
-    flex-shrink: 0;
 }
 </style>

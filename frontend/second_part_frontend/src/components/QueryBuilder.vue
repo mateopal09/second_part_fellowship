@@ -32,7 +32,7 @@
                 <p class="errors">{{ errorYearMessage }}</p>
                 <!-- Range input for selecting year -->
                 <input type="range" id="year" name="year" min="1985" max="2100" step="1" v-model="year"><br>
-                
+
                 <!-- Input for entering value -->
                 <label for="value">Value:</label><br>
                 <input type="number" id="value" name="value" step="any" v-model="value"><br>
@@ -151,9 +151,9 @@ export default {
             if (this.countryError || this.seriesError) {
                 return;
             }
-            
+
             // Check if the year is between 1985 and 2100
-            if(this.year < 1985 || this.year > 2100){
+            if (this.year < 1985 || this.year > 2100) {
                 this.errorYearMessage = 'Please, enter a year between 1985 and 2100';
                 return;
             } else {
@@ -167,23 +167,29 @@ export default {
                 year: this.year,
                 value: this.value
             })
-            .then(response => {
-                // If the request is successful, store the response data
-                this.responseData = response.data;
-                this.$emit('data-obtained', this.responseData);
+                .then(response => {
+                    // If the request is successful, store the response data
+                    this.responseData = response.data;
+                    this.$emit('data-obtained', this.responseData);
+                    this.$emit('query-made', {
+                        country_code: this.selectedCountry,
+                        series_code: this.selectedSeries,
+                        year: this.year,
+                        value: this.value
+                    });
 
-            })
-            .catch(error => {
-                // If the request fails, log the error to the console
-                console.error(error);
-            })
+                })
+                .catch(error => {
+                    // If the request fails, log the error to the console
+                    console.error(error);
+                })
         }
     }
 }
 </script>
 
 <style>
-:root{
+:root {
     /* Define a custom property for the font family */
     --font-family: var(--font-family);
 }
@@ -222,13 +228,14 @@ html {
 
 .errors {
     /* Style rules for error messages */
-    margin:0rem 0rem 1.5rem 1rem;
+    margin: 0rem 0rem 1.5rem 1rem;
     color: red;
     width: 20.5rem;
     font-family: var(--font-family);
 }
 
-.form-group select,.form-group input {
+.form-group select,
+.form-group input {
     /* Style rules for select and input elements in the form group */
     width: 80%;
     padding: 0.5rem;
@@ -242,26 +249,34 @@ html {
     /* Style rules for the query button */
     margin: 2rem;
     width: 60%;
-    background-color: #113140; /* Background color of the button */
-    color: #FFFFFF; /* Text color */
-    padding: 0.5rem; /* Internal spacing */
-    text-decoration: none; /* Remove text decoration */
-    font-size: 1.4rem; /* Font size */
-    transition-duration: 0.5s; /* Transition duration */
-    cursor: pointer; /* Change the cursor to a pointer */
-    border: 0.1rem solid #8D00FF; /* Neon purple border */
+    background-color: #113140;
+    /* Background color of the button */
+    color: #FFFFFF;
+    /* Text color */
+    padding: 0.5rem;
+    /* Internal spacing */
+    text-decoration: none;
+    /* Remove text decoration */
+    font-size: 1.4rem;
+    /* Font size */
+    transition-duration: 0.5s;
+    /* Transition duration */
+    cursor: pointer;
+    /* Change the cursor to a pointer */
+    border: 0.1rem solid #8D00FF;
+    /* Neon purple border */
     border-radius: 0.5rem;
 }
 
 .runquery:hover {
     /* Style rules for the query button when the mouse is over it */
-    background-color: #FFC300; /* Background color when the mouse is over */
+    background-color: #FFC300;
+    /* Background color when the mouse is over */
 }
 
-.responseData{
+.responseData {
     /* Style rules for the response data container */
     display: inline-block;
     justify-content: right;
     align-items: right;
-}
-</style>
+}</style>
