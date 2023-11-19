@@ -9,13 +9,19 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'D:\\Ver + Fellowship\\mateo_clou
 
 def visual_query_builder(country_code, series_code,year, value):
     """
-        Visual Query Builder
+    Visual Query Builder
 
-        This function executes a SQL query on the 'country_series_definitions' table
-        in the 'world_bank_intl_education' dataset of BigQuery's public data.
+    This function executes a SQL query for BigQuery on multiple tables in the 'world_bank_intl_education' dataset of BigQuery's public data.
+    The tables include 'country_series_definitions', 'international_education', 'series_summary', and 'country_summary'. The query retrieves counts of specified fields from these tables based on certain conditions.
 
-        Returns:
-            google.cloud.bigquery.table.RowIterator: An iterator over the query result rows.
+    Parameters:
+        country_code (str): The country code to be used in the query conditions.
+        series_code (str): The series code to be used in the query conditions.
+        year (int): The year to be used in the query conditions.
+        value (float): The value to be used in the query conditions.
+
+    Returns:
+        google.cloud.bigquery.table.RowIterator: An iterator over the query result rows.
     """
     client = bigquery.Client()
     query = f'''

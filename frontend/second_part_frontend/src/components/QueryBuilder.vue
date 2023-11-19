@@ -151,12 +151,6 @@ export default {
             if (this.countryError || this.seriesError) {
                 return;
             }
-
-            // Log the form inputs to the console
-            console.log(this.selectedCountry);
-            console.log(this.selectedSeries);
-            console.log(this.year);
-            console.log(this.value);
             
             // Check if the year is between 1985 and 2100
             if(this.year < 1985 || this.year > 2100){
@@ -176,8 +170,8 @@ export default {
             .then(response => {
                 // If the request is successful, store the response data
                 this.responseData = response.data;
-                console.log("Response data", this.responseData)
                 this.$emit('data-obtained', this.responseData);
+
             })
             .catch(error => {
                 // If the request fails, log the error to the console

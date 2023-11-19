@@ -4,36 +4,46 @@
             <h1 class="title-header">Query Lab</h1>
         </header>
         <main>
+            <!-- The QueryBuilder component is used to build the query. 
+                 When the data is obtained, the "updateData" method is called with the new data. -->
             <QueryBuilder @data-obtained="updateData"/>
+            
+            <!-- The VisualQuery component is used to visualize the data.
+                 The "responseData" prop is passed to it. -->
             <VisualQuery :data="responseData"/>
+
+
         </main>
         <footer>
             <p>Made by Mateo Palomá</p>
         </footer>
     </div>
 </template>
+
 <script>
 import QueryBuilder from './components/QueryBuilder.vue';
 import VisualQuery from './components/VisualQuery.vue';
 
+
 export default{
     name:"App",
     components: {
+    // Importing the QueryBuilder and VisualQuery components
     QueryBuilder,
     VisualQuery
-    },
+},
     data(){
         return {
+            // The responseData data property is used to store the data obtained from the query
             responseData: null
         }
     },
     methods: {
+        // The updateData method is used to update the responseData property with the new data
         updateData(newData){
-            this.respondeData = newData;
-            console.log("Datos actualizados")
+            this.responseData = newData;
         }
     }
-
 }
 </script>
 <style>
@@ -64,10 +74,12 @@ html {
 /**------------------
     Styles for ID app
     ----------------------*/
-#app {
-    display: block;
-    margin: 0;
-    padding: 0;
+
+
+body {
+    display:flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 
@@ -101,12 +113,10 @@ main {
     background-color: white;
     width: var(--with-size-page);
     height: auto;
+    flex: 1 0 auto;
     
 }
 
-VisualQuery{
-    
-}
 
 /**------------
     Styles for footer
@@ -122,5 +132,6 @@ footer {
     letter-spacing: 0.2rem;
     color: #FFC300;
     text-shadow: 0.1rem 0.1rem #B8B8D1;
+    flex-shrink: 0;
 }
 </style>
