@@ -1,21 +1,22 @@
 """
 Views for user_stories_feature
 """
-#Python
+# Python
 import json
 import pandas as pd
 
-#Django rest-framework
+# Django rest-framework
 from rest_framework import viewsets
 
-#Django
+# Django
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponse
 
-#Local Aplication
+# Local Aplication
 from user_stories_feature.queries import visual_query_builder
 from user_stories_feature.models import QueryModel, SavedQuery
 from user_stories_feature.serializers import QueryModelSerializer, SavedQuerySerializer
+
 
 @csrf_exempt
 def view_visual_query_builder(request):
@@ -39,20 +40,39 @@ def view_visual_query_builder(request):
         series_code = data.get('series_code')
         year = data.get('year')
         value = data.get('value')
-        results = visual_query_builder(country_code,series_code, year, value) 
-        df = pd.DataFrame({ 'Tables': ['country_summary', 'series_summary','international_education', 'country_series_definitions']})
+        results = visual_query_builder(country_code, series_code, year, value)
+        df = pd.DataFrame({'Tables': ['country_summary', 'series_summary',
+                          'international_education', 'country_series_definitions']})
         for row in results:
             i = df[df['Tables'] == row['table_name']].index[0]
             df.loc[i, 'country_code'] = row['country_count']
             df.loc[i, 'series_code'] = row['series_count']
             df.loc[i, 'year'] = row['year_count']
             df.loc[i, 'value'] = row['value_count']
-        df = df.fillna(0) 
+        df = df.fillna(0)
         result_list = df.to_dict('records')
         return JsonResponse(result_list, safe=False)
     else:
         return HttpResponse('This view only accepts POST requests', status=405)
-        
+
+
+def view_show_saved_queries(request):
+    saved_queries = SavedQuery.objects.all()
+    queries_list = []
+    for query in saved_queries:
+        query_info = {
+            'name': query.name,
+            'comment': query.comment,
+            'username': query.username,
+            'country_code': query.query.country_code,
+            'series_code': query.query.series_code,
+            'year': query.query.year,
+            'value': query.query.value
+        }
+        queries_list.append(query_info)
+    return JsonResponse(queries_list, safe=False)
+
+
 class QueryModelViewSet(viewsets.ModelViewSet):
     """
     ViewSet for the QueryModel
@@ -65,6 +85,7 @@ class QueryModelViewSet(viewsets.ModelViewSet):
     """
     queryset = QueryModel.objects.all()
     serializer_class = QueryModelSerializer
+
 
 class SavedQueryViewSet(viewsets.ModelViewSet):
     """

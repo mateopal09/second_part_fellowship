@@ -40,7 +40,8 @@
                     <!-- Message displayed when the query is successfully saved -->
                     <div v-if="requestStatus === 'success'" class="message success">Query succesfully saved</div>
                     <!-- Message displayed when there is an error saving the query -->
-                    <div v-else-if="requestStatus === 'error'" class="message error">Error to save the query</div>
+                    <div v-else-if="requestStatus === 'error'" class="message error">Error to save the query: It is
+                        necessary to create a query</div>
                 </div>
             </div>
         </main>
@@ -98,6 +99,7 @@ export default {
                                 setTimeout(() => {
                                     this.dialog = false;
                                 }, 2500);
+                                this.$emit('query-saved');
                             })
                             .catch(error => {
                                 console.error('Error saving the query:', error);
@@ -107,12 +109,17 @@ export default {
                     .catch(error => {
                         console.error('Error making the query:', error);
                     });
+            } else {
+                // If the query is empty, set the requestStatus to 'error'
+                if (this.queryError) {
+                    this.requestStatus = 'error';
+                }
             }
         }
     }
 }
 </script>
-<style>
+<style scoped>
 /* Define global custom properties */
 :root {
     --font-family: var(--font-family);
@@ -166,7 +173,8 @@ html {
     padding: 2rem;
     box-sizing: border-box;
     z-index: 1000;
-    display: none; /* Hide by default */
+    display: none;
+    /* Hide by default */
 }
 
 /* Show the dialog when the .dialog class is present */
@@ -177,10 +185,10 @@ html {
 /* Styles for the dialog content */
 .queryinformation .dialog-content {
     background-color: #113140;
-    padding: 20px;
-    border-radius: 10px;
+    padding: 2rem;
+    border-radius: 1rem;
     width: 100%;
-    max-width: 600px;
+    max-width: 60rem;
 }
 
 /* Styles for the button container */
