@@ -43,3 +43,22 @@ class SavedQuery(models.Model):
     comment = models.TextField()
     username = models.CharField(max_length=200)
     query = models.ForeignKey(QueryModel, on_delete=models.CASCADE)
+
+
+class CommentModel(models.Model):
+    """
+        CommentModel
+
+        Model with two fields: 'username' and 'comment'. 
+        Each instance of this model represents a comment made by a user.
+
+        Attributes:
+            username (CharField): A string that represents the username, with 200 max length of characters.
+            comment (TextField): A text field is a large text field to save the comments on the query.
+            saved_query (Foreign Key): References an instance of the model SavedQuery, this is a many-to-one relationship,
+                meaning each instance of this model can be associated with a single instance of SavedQuery. 
+                When the associated SavedQuery instance is deleted, this instance will also be deleted (CASCADE)
+    """
+    username = models.CharField(max_length=200)
+    comment = models.TextField()
+    saved_query = models.ForeignKey(SavedQuery, on_delete=models.CASCADE)

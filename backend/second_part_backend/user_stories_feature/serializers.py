@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 #Local Application
-from user_stories_feature.models import QueryModel, SavedQuery
+from user_stories_feature.models import QueryModel, SavedQuery, CommentModel
 
 class QueryModelSerializer(serializers.ModelSerializer):
     """
@@ -34,3 +34,17 @@ class SavedQuerySerializer(serializers.ModelSerializer):
     class Meta:
         model = SavedQuery
         fields = ['id','name','comment', 'username', 'query']
+
+class CommentModelSerializer(serializers.ModelSerializer):
+    """
+        Comment Model Serializer
+
+        This will be used for Comment Model and serialize the data
+
+        Attributes:
+            Meta.Model (SavedQuery): The model class to which this serializer is tied.
+            Meta.fields (list): The fields to be included in the serialized representation.
+    """
+    class Meta:
+        model =  CommentModel
+        fields = ['id','username','comment','saved_query']

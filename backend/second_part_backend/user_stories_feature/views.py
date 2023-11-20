@@ -7,6 +7,8 @@ import pandas as pd
 
 # Django rest-framework
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 # Django
 from django.views.decorators.csrf import csrf_exempt
@@ -14,8 +16,8 @@ from django.http import JsonResponse, HttpResponse
 
 # Local Aplication
 from user_stories_feature.queries import visual_query_builder
-from user_stories_feature.models import QueryModel, SavedQuery
-from user_stories_feature.serializers import QueryModelSerializer, SavedQuerySerializer
+from user_stories_feature.models import QueryModel, SavedQuery, CommentModel
+from user_stories_feature.serializers import QueryModelSerializer, SavedQuerySerializer, CommentModelSerializer
 
 
 @csrf_exempt
@@ -99,3 +101,42 @@ class SavedQueryViewSet(viewsets.ModelViewSet):
     """
     queryset = SavedQuery.objects.all()
     serializer_class = SavedQuerySerializer
+    
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        comments = CommentModel.objects.filter(saved_query=instance)
+        comment_serializer = CommentModelSerializer(comments, many=True)
+        return Response({
+            'query': serializer.data,
+            'comments': comment_serializer.data
+        })
+
+    @action(detail=True, methods=['post'])
+    def create_comment(self, request, pk=None):
+        saved_query = self.get_object()
+        comment = CommentModel.objects.create(
+            username=request.data['username'],
+            comment=request.data['comment'],
+            saved_query=saved_query
+        )
+        comment_serializer = CommentModelSerializer(comment)
+        saved_query_serializer = SavedQuerySerializer(saved_query)
+        return Response({
+            'comment': comment_serializer.data,
+            'saved_query': saved_query_serializer.data
+        })
+
+
+class CommentModelViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for the CommentModel
+
+    This ViewSet provides the CRUD operations for the CommentModel Instances.
+
+    Attributes:
+        - queryset (django.db.models.query.CommentModel): The CommentModel queryset.
+        - serializer_class (rest_framework.serializers.ModelSerializer). The serializer class.
+    """
+    queryset = CommentModel.objects.all()
+    serializer_class = CommentModelSerializer
