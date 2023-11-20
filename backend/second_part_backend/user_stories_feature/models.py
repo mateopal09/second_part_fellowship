@@ -61,4 +61,4 @@ class CommentModel(models.Model):
     """
     username = models.CharField(max_length=200)
     comment = models.TextField()
-    saved_query = models.ForeignKey(SavedQuery, on_delete=models.CASCADE)
+    saved_query = models.ForeignKey(SavedQuery,related_name='comments', on_delete=models.CASCADE)

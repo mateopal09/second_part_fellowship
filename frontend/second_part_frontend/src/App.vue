@@ -72,10 +72,8 @@ export default {
 </script>
 <style>
 /*
-
-/**
-    Setting reset CSS
-    */
+Reset CSS: Used to remove the default styles that browsers apply to HTML elements.
+*/
 * {
     box-sizing: border-box;
     margin: 0;
@@ -88,25 +86,21 @@ export default {
     --font-family: 'Good Times', sans-serif;
 }
 
-/**---------------------------------------------
-    Changing the font size in 10px so I can use REM
-    ----------------------------------------------*/
-html {
+/*Sets the font size and height for the html and body elements*/
+html, body {
     font-size: 62.5%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-/**------------------
-    Styles for ID app
-    ----------------------*/
+/*Sets the display property of the body element to flex and its direction to column*/
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
 }
 
-/**----------------
-    Styles for header
-    -----------------*/
+/*Styles for the header element*/
 header {
     display: flex;
     justify-content: center;
@@ -114,9 +108,9 @@ header {
     background-color: #0A192F;
     width: var(--with-size-page);
     height: 5.6rem;
-
 }
 
+/*Styles for the title inside the header*/
 .title-header {
     font-family: var(--font-family);
     font-size: 3rem;
@@ -125,25 +119,23 @@ header {
     text-shadow: 0.2rem 0.15rem #B8B8D1;
 }
 
-/** -------------
-    Styles for main
-    ---------------*/
+/*Styles for the main element*/
 main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     background-color: white;
     width: var(--with-size-page);
-    height: auto;
+    flex-grow: 1; /* Added so that main grows to fill the space */
 }
 
+/*Styles for the savequery class*/
 .savequery {
-    /* Styles for  SaveQuery */
     position: relative;
     top: 40rem;
-
 }
 
+/*Styles for the showqueries class*/
 .showqueries {
     display: flex;
     justify-content: center;
@@ -151,9 +143,7 @@ main {
     height: 80vh;
 }
 
-/**------------
-    Styles for footer
-    ---------------*/
+/*Styles for the footer element*/
 footer {
     display: flex;
     justify-content: center;
@@ -165,5 +155,7 @@ footer {
     letter-spacing: 0.2rem;
     color: #FFC300;
     text-shadow: 0.1rem 0.1rem #B8B8D1;
+    margin-top: 20rem;
+    font-size: 1.5rem;
 }
 </style>

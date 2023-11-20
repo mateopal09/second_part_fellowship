@@ -37,41 +37,71 @@ def view_visual_query_builder(request):
         method is not 'POST', the response will be an HTTP 405 error.
     """
     if request.method == 'POST':
+            # If the request method is POST, parse the request body as JSON
         data = json.loads(request.body)
+        
+        # Extract the country code, series code, year, and value from the data
         country_code = data.get('country_code')
         series_code = data.get('series_code')
         year = data.get('year')
         value = data.get('value')
+        
+        # Call the visual_query_builder function with the extracted data
         results = visual_query_builder(country_code, series_code, year, value)
+        
+        # Create a DataFrame with the table names
         df = pd.DataFrame({'Tables': ['country_summary', 'series_summary',
-                          'international_education', 'country_series_definitions']})
+                        'international_education', 'country_series_definitions']})
+        
+        # Loop through the results and update the DataFrame
         for row in results:
             i = df[df['Tables'] == row['table_name']].index[0]
             df.loc[i, 'country_code'] = row['country_count']
             df.loc[i, 'series_code'] = row['series_count']
             df.loc[i, 'year'] = row['year_count']
             df.loc[i, 'value'] = row['value_count']
+        
+        # Fill any missing values in the DataFrame with 0
         df = df.fillna(0)
+        
+        # Convert the DataFrame to a list of dictionaries
         result_list = df.to_dict('records')
+        
+        # Return a JSON response with the result list
         return JsonResponse(result_list, safe=False)
     else:
+        # If the request method is not POST, return an HTTP 405 Method Not Allowed response
         return HttpResponse('This view only accepts POST requests', status=405)
 
 
 def view_show_saved_queries(request):
+    # Fetch all SavedQuery objects from the database
     saved_queries = SavedQuery.objects.all()
+    
+    # Initialize an empty list to store the queries
     queries_list = []
+    
+    # Loop through each SavedQuery object
     for query in saved_queries:
+        # Create a dictionary with the query information
         query_info = {
+            'id': query.id,
             'name': query.name,
             'comment': query.comment,
             'username': query.username,
             'country_code': query.query.country_code,
             'series_code': query.query.series_code,
             'year': query.query.year,
-            'value': query.query.value
+            'value': query.query.value,
+            # Use a list comprehension to create a list of comments for the query
+            'comments': [{'username': comment.username, 'comment': comment.comment} for comment in query.comments.all()]
         }
+        
+        # Append the query information to the list of queries
         queries_list.append(query_info)
+    
+    # Return a JSON response with the list of queries
+    # The safe parameter is set to False because we're passing a non-dict object
     return JsonResponse(queries_list, safe=False)
 
 
@@ -101,31 +131,26 @@ class SavedQueryViewSet(viewsets.ModelViewSet):
     """
     queryset = SavedQuery.objects.all()
     serializer_class = SavedQuerySerializer
-    
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance)
-        comments = CommentModel.objects.filter(saved_query=instance)
-        comment_serializer = CommentModelSerializer(comments, many=True)
-        return Response({
-            'query': serializer.data,
-            'comments': comment_serializer.data
-        })
 
-    @action(detail=True, methods=['post'])
+    @action(detail=True, methods=['get', 'post'])
     def create_comment(self, request, pk=None):
+        # Get the SavedQuery object
         saved_query = self.get_object()
-        comment = CommentModel.objects.create(
-            username=request.data['username'],
-            comment=request.data['comment'],
-            saved_query=saved_query
-        )
-        comment_serializer = CommentModelSerializer(comment)
+        
+        # Check if the request method is POST
+        if request.method == 'POST':
+            # Create a new CommentModel object with the data from the request
+            comment = CommentModel.objects.create(
+                username=request.data['username'],
+                comment=request.data['comment'],
+                saved_query=saved_query
+            )
+            
+        # Serialize the SavedQuery object
         saved_query_serializer = SavedQuerySerializer(saved_query)
-        return Response({
-            'comment': comment_serializer.data,
-            'saved_query': saved_query_serializer.data
-        })
+        
+        # Return a response with the serialized data
+        return Response(saved_query_serializer.data)
 
 
 class CommentModelViewSet(viewsets.ModelViewSet):

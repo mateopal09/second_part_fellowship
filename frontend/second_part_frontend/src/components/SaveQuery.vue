@@ -98,7 +98,7 @@ export default {
                                 // Delay the closing of the dialog by 2.5 seconds to show the success message
                                 setTimeout(() => {
                                     this.dialog = false;
-                                }, 2500);
+                                }, 2000);
                                 this.$emit('query-saved');
                             })
                             .catch(error => {
@@ -173,32 +173,48 @@ html {
     padding: 2rem;
     box-sizing: border-box;
     z-index: 1000;
-    display: none;
-    /* Hide by default */
-}
-
-/* Show the dialog when the .dialog class is present */
-.queryinformation.dialog {
-    display: flex;
+    display: none; /* Hide by default */
 }
 
 /* Styles for the dialog content */
 .queryinformation .dialog-content {
+    display: flex;
+    flex-direction: column;
     background-color: #113140;
     padding: 2rem;
     border-radius: 1rem;
     width: 100%;
     max-width: 60rem;
+    color:aliceblue;
+    font-family: var(--font-family);
 }
 
-/* Styles for the button container */
+/* Styles for the input fields and labels in the dialog */
+.dialog-content label {
+    margin: 1rem 0;
+}
+
+.dialog-content input {
+    width: 50%;
+    border-radius: 0.5rem;
+}
+
+.dialog-content #name, #username {
+    height: 3rem;
+}
+
+.dialog-content #comment {
+    height: 6rem;
+}
+
+/* Styles for the button container in the dialog */
 .queryinformation .dialog-content .button_container {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
 }
 
-/* Styles for the close and save buttons */
+/* Styles for the close and save buttons in the dialog */
 .close,
 .save {
     width: 10rem;

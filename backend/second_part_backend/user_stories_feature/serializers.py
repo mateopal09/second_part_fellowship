@@ -20,21 +20,6 @@ class QueryModelSerializer(serializers.ModelSerializer):
         model = QueryModel
         fields = ['id','country_code', 'series_code', 'year', 'value']
 
-
-class SavedQuerySerializer(serializers.ModelSerializer):
-    """
-        Saved Query Serializer
-
-        This will be used for Save the query that the user wants to save
-
-        Attributes:
-            Meta.Model (SavedQuery): The model class to which this serializer is tied.
-            Meta.fields (list): The fields to be included in the serialized representation.
-    """
-    class Meta:
-        model = SavedQuery
-        fields = ['id','name','comment', 'username', 'query']
-
 class CommentModelSerializer(serializers.ModelSerializer):
     """
         Comment Model Serializer
@@ -48,3 +33,20 @@ class CommentModelSerializer(serializers.ModelSerializer):
     class Meta:
         model =  CommentModel
         fields = ['id','username','comment','saved_query']
+
+
+class SavedQuerySerializer(serializers.ModelSerializer):
+    """
+        Saved Query Serializer
+
+        This will be used for Save the query that the user wants to save
+
+        Attributes:
+            Meta.Model (SavedQuery): The model class to which this serializer is tied.
+            Meta.fields (list): The fields to be included in the serialized representation.
+    """
+    comments = CommentModelSerializer(many=True, read_only=True)
+    class Meta:
+        model = SavedQuery
+        fields = ['id','name','comment', 'username', 'query', 'comments']
+

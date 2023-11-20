@@ -123,8 +123,9 @@ export default {
 }
 </script>
 <style>
+/* Css styles for the id visual-query */
 #visual-query {
-  height: 42.5rem;
+  height: 40rem;
   width: 70rem;
   position: relative;
   right: 0;
