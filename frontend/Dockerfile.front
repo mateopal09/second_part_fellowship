@@ -1,0 +1,21 @@
+# Use an official Node.js runtime as a parent image
+FROM node:14
+
+# Set the working directory to /code
+WORKDIR /code
+
+# Copy both package.json files to the working directory
+COPY package.json /code/
+COPY second_part_frontend/package.json /code/second_part_frontend/
+
+# Install any needed packages specified in package.json
+RUN npm install
+
+# Copy the rest of the application code to the working directory
+COPY . /code/
+
+# Make port 3000 available to the world outside this container
+EXPOSE 5173
+
+# Run app.py when the container launches
+CMD ["npm", "run", "vite"]

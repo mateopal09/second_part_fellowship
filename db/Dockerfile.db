@@ -1,0 +1,10 @@
+#Using the last version for postgres
+FROM postgres:latest
+
+#Set Database environment variables
+ENV POSTGRES_DB=second_part
+ENV POSTGRES_USER=mateo
+ENV POSTGRES_PASSWORD=123456
+
+#Initialize the directory with container
+COPY backup.sql /docker-entrypoint-initdb.d/
