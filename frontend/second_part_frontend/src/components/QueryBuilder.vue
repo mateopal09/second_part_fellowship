@@ -1,26 +1,42 @@
 <template>
+    <!-- Main container for the component -->
     <div id="query-builder">
+        <!-- Main content of the component -->
         <main>
+            <!-- Form for user input -->
             <div class="form-group">
+                <!-- Dropdown for selecting country code -->
                 <label for="country_code">Country Code:</label><br>
-                <select id="country_code" v-model="selectedCountry" requiered>
+                <select id="country_code" v-model="selectedCountry" required>
                     <option v-for="country in country_code_array" :value="country">
                         {{ country }}
                     </option>
                 </select><br>
+                <!-- Error message for country code -->
+                <div class="errors" v-if="countryError" style="color:red;">Field necessary</div>
+
+                <!-- Dropdown for selecting series code -->
                 <label for="series_code">Series Code:</label><br>
                 <select id="series_code" v-model="selectedSeries" required>
                     <option v-for="series in series_code_array" :value="series">
                         {{ series }}
                     </option>
                 </select><br>
+                <!-- Error message for series code -->
+                <div class="errors" v-if="seriesError" style="color:red;">Field necessary</div>
+
+                <!-- Input for entering year -->
                 <label for="year">Year:</label><br>
                 <input type="number" id="year-text" name="year-text" min="1985" max="2100" step="1" v-model="year"><br>
-                <p class="year_error">{{ errorYearMessage }}</p>
+                <!-- Error message for year -->
+                <p class="errors">{{ errorYearMessage }}</p>
+                <!-- Range input for selecting year -->
                 <input type="range" id="year" name="year" min="1985" max="2100" step="1" v-model="year"><br>
-                
+
+                <!-- Input for entering value -->
                 <label for="value">Value:</label><br>
                 <input type="number" id="value" name="value" step="any" v-model="value"><br>
+                <!-- Button for running query -->
                 <button class="runquery" v-on:click="runquery">Run Query</button>
             </div>
         </main>
@@ -28,18 +44,26 @@
 </template>
 
 <script>
-//Axios to make requests
+// Importing the axios library for making HTTP requests
 import axios from 'axios';
 
 export default {
     name: "App",
+    // Defining the data properties for the component
     data: function () {
         return {
+            // Data properties for form inputs
             selectedCountry: null,
             selectedSeries: null,
             year: 2000,
             value: 0,
+            // Data properties for error messages
             errorYearMessage: null,
+            countryError: false,
+            seriesError: false,
+            // Data property for storing the response data from the API
+            responseData: null,
+            // Arrays for the dropdown options
             country_code_array: [
                 "ALB",
                 "AUS",
@@ -113,57 +137,79 @@ export default {
                 "SP.POP.1564.FE.IN",
                 "SP.POP.0014.MA.IN",
                 "SP.POP.0014.FE.IN"],
-            // query: {}
+
         };
     },
     methods: {
+        // Method for running the query when the form is submitted
         runquery() {
-            console.log(this.selectedCountry);
-            console.log(this.selectedSeries);
-            console.log(this.year);
-            console.log(this.value);
-            
-            if(this.year < 1985 || this.year > 2100){
+            // Check if the country and series fields are filled out
+            this.countryError = !this.selectedCountry;
+            this.seriesError = !this.selectedSeries;
+
+            // If either field is not filled out, stop the function
+            if (this.countryError || this.seriesError) {
+                return;
+            }
+
+            // Check if the year is between 1985 and 2100
+            if (this.year < 1985 || this.year > 2100) {
                 this.errorYearMessage = 'Please, enter a year between 1985 and 2100';
                 return;
-            }else {
+            } else {
                 this.errorYearMessage = null;
             }
 
-            axios.post('http://127.0.0.1:8000/api/query-builder/', {
+            // Make a POST request to the API with the form inputs
+            axios.post('http://127.0.0.1:8000', {
                 country_code: this.selectedCountry,
-                series_code:this.selectedSeries,
+                series_code: this.selectedSeries,
                 year: this.year,
                 value: this.value
             })
-            .then(response =>{
-                console.log(response.data);
-            })
-            .catch(error => {
-                console.error(error);
-            })
+                .then(response => {
+                    // If the request is successful, store the response data
+                    this.responseData = response.data;
+                    this.$emit('data-obtained', this.responseData);
+                    this.$emit('query-made', {
+                        country_code: this.selectedCountry,
+                        series_code: this.selectedSeries,
+                        year: this.year,
+                        value: this.value
+                    });
 
+                })
+                .catch(error => {
+                    // If the request fails, log the error to the console
+                    console.error(error);
+                })
         }
     }
 }
 </script>
 
 <style>
-:root{
+:root {
+    /* Define a custom property for the font family */
     --font-family: var(--font-family);
 }
 
 * {
+    /* Apply a box-sizing rule to all elements */
     box-sizing: border-box;
+    /* Remove default margins from all elements */
     margin: 0;
+    /* Remove default padding from all elements */
     padding: 0;
 }
 
 html {
+    /* Set the base font size for the document */
     font-size: 62.5%;
 }
 
 .form-group {
+    /* Style rules for the form group */
     display: flex;
     flex-direction: column;
     margin: 1rem;
@@ -173,22 +219,24 @@ html {
 }
 
 .form-group label {
+    /* Style rules for the labels in the form group */
     margin: 0.5rem 2rem;
     font-size: 1.5rem;
     font-family: var(--font-family);
     color: black;
-
-    
 }
 
-.year_error {
-    margin-left: 1rem;
+.errors {
+    /* Style rules for error messages */
+    margin: 0rem 0rem 1.5rem 1rem;
     color: red;
     width: 20.5rem;
-    font-family: var(--font-family) ;
+    font-family: var(--font-family);
 }
 
-.form-group select,.form-group input {
+.form-group select,
+.form-group input {
+    /* Style rules for select and input elements in the form group */
     width: 80%;
     padding: 0.5rem;
     font-size: 1rem;
@@ -198,30 +246,37 @@ html {
 }
 
 .runquery {
+    /* Style rules for the query button */
     margin: 2rem;
     width: 60%;
     background-color: #113140;
-    /* Color de fondo del botón */
+    /* Background color of the button */
     color: #FFFFFF;
-    /* Color del texto */
+    /* Text color */
     padding: 0.5rem;
-    /* Espaciado interno */
+    /* Internal spacing */
     text-decoration: none;
-    /* Remueve la decoración del texto */
+    /* Remove text decoration */
     font-size: 1.4rem;
-    /* Tamaño de la fuente */
+    /* Font size */
     transition-duration: 0.5s;
-    /* Duración de la transición */
+    /* Transition duration */
     cursor: pointer;
-    /* Cambia el cursor a un puntero */
+    /* Change the cursor to a pointer */
     border: 0.1rem solid #8D00FF;
-    /* Borde púrpura neón */
+    /* Neon purple border */
     border-radius: 0.5rem;
-
 }
 
 .runquery:hover {
+    /* Style rules for the query button when the mouse is over it */
     background-color: #FFC300;
-    /* Color de fondo del botón cuando el mouse está encima */
+    /* Background color when the mouse is over */
 }
-</style>
+
+.responseData {
+    /* Style rules for the response data container */
+    display: inline-block;
+    justify-content: right;
+    align-items: right;
+}</style>

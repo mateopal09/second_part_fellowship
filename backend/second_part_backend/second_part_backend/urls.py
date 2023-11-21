@@ -9,14 +9,15 @@ from django.contrib import admin
 from django.urls import path, include
 
 #Local Application
-from user_stories_feature.views import QueryModelViewSet
+from user_stories_feature.views import QueryModelViewSet, SavedQueryViewSet
 
 #Create a router and register our viewsets with it.
 router = routers.DefaultRouter()
 router.register(r'query-builder', QueryModelViewSet)
+router.register(r'saved-queries', SavedQueryViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user-storie',include('user_stories_feature.urls')),
-    path('api/', include(router.urls))
+    path('',include('user_stories_feature.urls')),
+    path('api/', include(router.urls)),
 ]

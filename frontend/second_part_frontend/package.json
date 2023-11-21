@@ -9,9 +9,10 @@
     "serve": "vue-cli-service"
   },
   "dependencies": {
-    "@syncfusion/ej2-vue-querybuilder": "^23.1.44",
     "axios": "^1.6.2",
-    "vue": "^3.3.4"
+    "chart.js": "^4.4.0",
+    "vue": "^3.3.4",
+    "vue-chartjs": "^5.2.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.4.0",
