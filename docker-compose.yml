@@ -1,41 +1,39 @@
-version: '3'
-services:
-  db:
-    image: postgres:latest  
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment: 
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - '5432:5432'
+version: '3'  # Docker Compose file version
+services:  # Services that make up your app
+  db:  # Database service
+    image: postgres:latest  # Uses latest PostgreSQL image
+    volumes:  # Volumes for the db service
+      - postgres_data:/var/lib/postgresql/data/  # Maps volume to directory in container
+    environment:  # Environment variables for the db service
+      POSTGRES_DB: ${DB_NAME}  # Database name
+      POSTGRES_USER: ${DB_USER}  # Database username
+      POSTGRES_PASSWORD: ${DB_PASSWORD}  # Database password
+    ports:  # Ports for the db service
+      - '5432:5432'  # Maps container port to host machine port
 
-  backend:
-    build: 
-      context: ./backend/second_part_backend
-      dockerfile: Dockerfile.back
-    ports:
-      - '8000:8000'
-    depends_on:
-      - db
-    environment:
-      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
-      SECRET_KEY: ${SECRET_KEY}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT}
+  backend:  # Backend service
+    build:  # Build configuration for the backend service
+      context: ./backend/second_part_backend  # Build context directory
+      dockerfile: Dockerfile.back  # Dockerfile for the backend service
+    ports:  # Ports for the backend service
+      - '8000:8000'  # Maps container port to host machine port
+    depends_on:  # Services that this service depends on
+      - db  # This service depends on the db service
+    environment:  # Environment variables for the backend service
+      DB_NAME: ${DB_NAME}  # Database name
+      DB_USER: ${DB_USER}  # Database username
+      DB_PASSWORD: ${DB_PASSWORD}  # Database password
+      DB_HOST: ${DB_HOST}  # Database host
+      DB_PORT: ${DB_PORT}  # Database port
 
-  frontend:
-    build: 
-      context: ./frontend
-      dockerfile: Dockerfile.front
-    ports:
-      - '9000:9000'
-    depends_on:
-      - backend
+  frontend:  # Frontend service
+    build:  # Build configuration for the frontend service
+      context: ./frontend  # Build context directory
+      dockerfile: Dockerfile.front  # Dockerfile for the frontend service
+    ports:  # Ports for the frontend service
+      - '9000:9000'  # Maps container port to host machine port
+    depends_on:  # Services that this service depends on
+      - backend  # This service depends on the backend service
 
-volumes:  
-  postgres_data:
+volumes:  # Volumes used by your services
+  postgres_data:  # Volume used by the db service

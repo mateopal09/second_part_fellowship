@@ -19,3 +19,5 @@ Finally in the Query Comedy Table, is the place where all the query lab are. you
 As we want to comment everything, you will have the "comment" button to comment any query you want and it is in the Query comedy table. Just have fun creating the comment.
 
 And as we would like to see again the fields on the query builder, just think twice how to do it" and you will get it.
+
+Here is the Youtube Link https://youtu.be/RC4RaK3SB3c
