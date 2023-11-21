@@ -19,6 +19,9 @@ COPY . /code/
 #Exclude files and directories of .dockerignore
 RUN cat /code/.dockerignore | xargs rm -rf
 
+#Make port 8000 available
+EXPOSE 8000
+
 #Comand to execute when the container run
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 

@@ -1,23 +1,26 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14
+FROM node:lts-alpine
 
-# Set the working directory to /code
-WORKDIR /code
+# Set the working directory to /app
+WORKDIR /app
 
-# Copy package.json to the working directory
-COPY second_part_frontend/package.json /code/
+# Copy both package.json files to the working directory
+COPY package.json /app/
+COPY second_part_frontend/package.json /app/second_part_frontend/
 
-# Install any needed packages specified in package.json
+# Install any needed packages specified in both package.json files
 RUN npm install
+RUN cd second_part_frontend && npm install
 
 # Copy the rest of the application code to the working directory
-COPY second_part_frontend /code/
+COPY . /app/
 
 #Exclude files and directories of dockerignore
-RUN cat cat /code/.dockerignore | xargs rm -rf
+RUN cat /app/.dockerignore | xargs rm -rf
 
-# Make port 3000 available to the world outside this container
-EXPOSE 5173
+# Make port 9000 available to the world outside this container
+EXPOSE 9000
 
-# Run app.py when the container launches
+# Change the working directory to second_part_frontend and run the dev script
+WORKDIR /app/second_part_frontend
 CMD ["npm", "run", "dev"]

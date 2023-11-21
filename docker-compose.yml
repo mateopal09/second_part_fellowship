@@ -1,13 +1,15 @@
 version: '3'
 services:
   db:
-    image: postgres:latest
+    image: postgres:latest  
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      POSTGRES_DB: second_part
-      POSTGRES_USER: mateo
-      POSTGRES_PASSWORD: 123456
+    environment: 
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - '5432:5432'
 
   backend:
     build: 
@@ -17,6 +19,14 @@ services:
       - '8000:8000'
     depends_on:
       - db
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: ${GOOGLE_APPLICATION_CREDENTIALS}
+      SECRET_KEY: ${SECRET_KEY}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
 
   frontend:
     build: 
@@ -27,5 +37,5 @@ services:
     depends_on:
       - backend
 
-volumes:
+volumes:  
   postgres_data:

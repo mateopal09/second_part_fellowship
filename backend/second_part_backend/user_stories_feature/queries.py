@@ -1,11 +1,17 @@
 #Standard libraries
 import os 
 
+#Python dotenv
+from dotenv import load_dotenv
+
 #Google cloud
 from google.cloud import bigquery
 
+load_dotenv()
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'D:\\Ver + Fellowship\\mateo_cloud_service.json'
+google_application_credentials = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
+print(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
+
 
 def visual_query_builder(country_code, series_code,year, value):
     """
