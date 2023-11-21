@@ -1,0 +1,31 @@
+version: '3'
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: second_part
+      POSTGRES_USER: mateo
+      POSTGRES_PASSWORD: 123456
+
+  backend:
+    build: 
+      context: ./backend/second_part_backend
+      dockerfile: Dockerfile.back
+    ports:
+      - '8000:8000'
+    depends_on:
+      - db
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.front
+    ports:
+      - '9000:9000'
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
