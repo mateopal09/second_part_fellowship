@@ -20,7 +20,8 @@
       </thead>
       <tbody v-for="(query, index) in queries" :key="'query-' + index">
         <!-- Table rows for displaying the queries -->
-        <tr>
+        <!-- Event for select a query -->
+        <tr @dblclick="selectQuery(query)">
           <td>{{ query.name }}</td>
           <td>{{ query.comment }}</td>
           <td>{{ query.username }}</td>
@@ -37,7 +38,7 @@
         <tr class="comment_user" v-for="(comment, commentIndex) in query.comments"
           :key="'comments-' + index + '-' + commentIndex">
           <td colspan="8">
-            <ul style="list-style-type: none;">
+            <ul class="user_comment" style="list-style-type: none;">
               <li>
                 <!-- Display the username and comment -->
                 <strong style="font-size: 1.1rem;">User:</strong> {{ comment.username }},
@@ -96,6 +97,9 @@ export default {
     async loadQueries() { // Method for loading the queries
       const response = await axios.get('http://localhost:8000/show_queries/'); // Making a GET request to the server to fetch the queries
       this.queries = response.data; // Storing the response data in the queries array
+    },
+    selectQuery(query){//Method to emit the information of the query
+      this.$emit('querySelected', query);
     },
     async addComment() { // Method for adding a comment
       let selectedQueryId = this.selectedQuery.id; // Getting the id of the selected query
@@ -171,6 +175,12 @@ export default {
   font-size: 1.2rem;
 }
 
+#ShowQueries td:hover {
+  /* Change the color of the td elements when you hover over them */
+  background-color: #DAE7F3;
+  color: #152D44;
+}
+
 #ShowQueries tr:nth-child(even) {
   /* Set a different background color for even rows */
   background-color: #ACC8E5;
@@ -195,6 +205,18 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.comment_user {
+  /* Set the initial color of the elements with the user_comment class */
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.comment_user:hover {
+  /* Change the color of the elements with the user_comment class when you hover over them */
+  background-color: #DAE7F3;
+  color: #152D44;
 }
 
 .comment {
@@ -224,6 +246,7 @@ export default {
 .comment:hover {
   background-color: #8D00FF;
 }
+
 
 .queryinformation {
   /* Style the queryinformation class with a fixed position, full width and height, semi-transparent black background color, centered content, padding, box sizing, and a high z-index */

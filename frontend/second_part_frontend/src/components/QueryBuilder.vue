@@ -8,7 +8,7 @@
                 <!-- Dropdown for selecting country code -->
                 <label for="country_code">Country Code:</label><br>
                 <select id="country_code" v-model="selectedCountry" required>
-                    <option v-for="country in country_code_array" :value="country">
+                    <option v-for="(country, index) in country_code_array" :value="country" :key="index">
                         {{ country }}
                     </option>
                 </select><br>
@@ -18,7 +18,7 @@
                 <!-- Dropdown for selecting series code -->
                 <label for="series_code">Series Code:</label><br>
                 <select id="series_code" v-model="selectedSeries" required>
-                    <option v-for="series in series_code_array" :value="series">
+                    <option v-for="(series, index) in series_code_array" :value="series" :key="index">
                         {{ series }}
                     </option>
                 </select><br>
@@ -49,6 +49,9 @@ import axios from 'axios';
 
 export default {
     name: "App",
+    props: {
+        query: Object
+    },
     // Defining the data properties for the component
     data: function () {
         return {
@@ -139,6 +142,16 @@ export default {
                 "SP.POP.0014.FE.IN"],
 
         };
+    },
+    watch: {
+        query(newQuery) {
+            if (newQuery) {
+                this.selectedCountry = newQuery.country_code;
+                this.selectedSeries = newQuery.series_code;
+                this.year = newQuery.year;
+                this.value = newQuery.value;
+            }
+        }
     },
     methods: {
         // Method for running the query when the form is submitted
@@ -279,4 +292,5 @@ html {
     display: inline-block;
     justify-content: right;
     align-items: right;
-}</style>
+}
+</style>

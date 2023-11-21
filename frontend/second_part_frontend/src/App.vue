@@ -10,7 +10,8 @@
         <main>
             <!-- The QueryBuilder component is used to build the query. 
                  When the data is obtained, the "updateData" method is called with the new data. -->
-            <QueryBuilder class="querybuilder" @data-obtained="updateData" @query-made="querycreated" />
+            <QueryBuilder class="querybuilder" :query="selectedQuery" @data-obtained="updateData"
+                @query-made="querycreated" />
 
             <!-- The VisualQuery component is used to visualize the data.
                  The "responseData" prop is passed to it. -->
@@ -21,7 +22,7 @@
             <SaveQuery class="savequery" :query="query" @query-saved="Updatequery" />
 
             <!-- The ShowQueries component is used to display the queries. -->
-            <ShowQueries class="showqueries" ref="showQueries" />
+            <ShowQueries class="showqueries" ref="showQueries" @querySelected="selectedQuery = $event" />
         </main>
         <!-- Footer section -->
         <footer>
@@ -51,7 +52,9 @@ export default {
             // The responseData data property is used to store the data obtained from the query
             responseData: null,
             // The query data property is used to store the created query
-            query: null
+            query: null,
+            // The selectedQuery data property is used to store the selected query
+            selectedQuery: null
         }
     },
     methods: {
@@ -63,7 +66,7 @@ export default {
         querycreated(query) {
             this.query = query;
         },
-        // The Updatequery method is used to reload the queries in the ShowQueries component
+        // The Update query method is used to reload the queries in the ShowQueries component
         Updatequery() {
             this.$refs.showQueries.loadQueries();
         }
@@ -87,7 +90,8 @@ Reset CSS: Used to remove the default styles that browsers apply to HTML element
 }
 
 /*Sets the font size and height for the html and body elements*/
-html, body {
+html,
+body {
     font-size: 62.5%;
     height: 100%;
     margin: 0;
@@ -126,7 +130,8 @@ main {
     flex-wrap: wrap;
     background-color: white;
     width: var(--with-size-page);
-    flex-grow: 1; /* Added so that main grows to fill the space */
+    flex-grow: 1;
+    /* Added so that main grows to fill the space */
 }
 
 /*Styles for the savequery class*/
@@ -157,5 +162,4 @@ footer {
     text-shadow: 0.1rem 0.1rem #B8B8D1;
     margin-top: 20rem;
     font-size: 1.5rem;
-}
-</style>
+}</style>
