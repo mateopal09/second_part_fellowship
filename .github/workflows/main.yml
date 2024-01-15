@@ -29,14 +29,15 @@ jobs:
         file: ./backend/second_part_backend/Dockerfile.back
         push: false
 
-    - name: Run Docker container
+    - name: Create .env file
       run: |
-        DB_NAME=${{ secrets.DB_NAME }} \
-        DB_USER=${{ secrets.DB_USER }} \
-        DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
-        DB_HOST=${{ secrets.DB_HOST }} \
-        DB_PORT=${{ secrets.DB_PORT }} \
-        SECRET_KEY=${{ secrets.SECRET_KEY }} \
-        GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} \
-        docker-compose up -d 
- 
+        echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+        echo DB_USER=${{ secrets.DB_USER }} >> .env
+        echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+        echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+        echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+        echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
+        echo GOOGLE_APPLICATION_CREDENTIALS=${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} >> .env
+
+    - name: Run Docker container
+      run: docker-compose --env-file .env up -d 
