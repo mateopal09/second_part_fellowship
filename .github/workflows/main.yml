@@ -40,5 +40,6 @@ jobs:
         echo GOOGLE_APPLICATION_CREDENTIALS=./path/to/your/google/credentials.json >> .env
 
 
+
     - name: Run Docker container
       run: docker-compose --env-file .env up -d 
